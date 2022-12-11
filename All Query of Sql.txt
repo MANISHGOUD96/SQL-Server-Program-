@@ -1,0 +1,674 @@
+-- Create data bases--
+
+create database manish;
+
+--Use Data bases--
+use manish;
+
+--Delete Data bases--
+drop  database manish
+
+--Create table--
+
+create table emp (eNO int,eName varchar(20),eAge float,eSal float)
+
+--Show the structure of table--
+
+SP_Help emp
+
+-- Inseret value in table--
+
+insert into emp values(101,'Manish',22.6,15000.35) 
+insert into emp (eNO,eSal)values(102,100.2) 
+
+insert into emp values(103,'Nikhel',24.6,18500.50),
+(104,'Shubham',Null,10000.21),(105,'Nikhel',24.6,Null),
+(106,'Mohan',17.3,Null),(107,Null,21.5,1500.50),
+(108,'Devid',12.4,100.2),(Null,'Nikhel',24.6,18500.50)
+
+--Show the data in table form--
+
+select * from emp
+select eNO,eName from emp;  --Projection--
+select * from emp where eName='Nikhel'; --Selection--
+select eNO,eName from emp where eSal=18500.5; --Projection & Selection--
+
+
+--Update the table--
+
+update emp set eName=null,eAge=60,eSal=150000.2 where eNO=107;
+update emp set eName='Rahul' where eNo=107
+update emp set eAge=17 where eAge=22.6
+update emp set eNO=108 where eNO=109
+
+select * from emp
+
+--Delete Data all Table--
+drop table emp
+
+
+--Delet the Row in table--
+
+delete from emp where eNO=108;
+select * from emp
+
+-- Add Column in Table--
+
+alter table emp add eDep varchar(20);
+select * from emp;
+
+-- Delete (Drop) Column in Table--
+
+alter table emp drop column eDep;
+select * from emp;
+
+--Change Data Type of Column--
+
+alter table emp alter column eSal int;
+select * from emp;
+
+--Rename the Column Name--
+
+SP_Rename 'emp.eNO','empNo';
+select * from emp;
+
+--Rename the Tbale Name--
+
+SP_rename 'emp','Employee';
+select * from Employee;
+
+SP_rename 'Employee','empl';
+select * from empl;
+
+--Search the name with latter using LIKE Keyword --
+
+select *from empl where eName LIKE 'd%';    --Starting Letter of Name with d --
+select *from empl where eName LIKE '%l';    --Ending Letter of Name with l --
+select *from empl where eName LIKE '%h%';   --Any where the Letter in Name h--
+select *from empl where eName LIKE '%_h_%'; --Left first and last any where the Letter in Name h--
+select *from empl where eName LIKE '_a%';   --Starting second Letter of Name with a --
+select *from empl where eName LIKE '%u_';   --Ending second Letter of Name with u --
+
+--Aggregate Function--
+
+select sum(eSal)as TotalSelary from empl;   --Sum of Total Selary in Table--
+select max(eSal)as MaximunSelary from empl; --Maximun Selary in Table--
+select min(eSal)as MinimunSelary from empl; --Minimum Selary in Table--
+select avg(eSal)as AverageSelary from empl; --Average Selary in Table--
+select count(empNo)as CountTotal from empl; --Count total employee in Table--
+
+--Aggregation in Single Line--
+
+select sum(eSal) TotalSelary,max(eSal) MaximumSelary,min(eSal) MinimumSelary,
+avg(eSal) AverageSelary,count (empNo) TotalEmployee from empl;
+
+--Print data in  Order By--
+
+select * from empl ORDER by eSal;        --Order by work in ascending Order by Default--
+select * from empl ORDER by eAge asc;    --Print ascending Order--
+select * from empl ORDER by empNo desc;  --Print descending Order--
+
+--Create Table--
+create table dep1(dNo int ,dName varchar(20),dSal int)
+
+Insert into dep1 values(101,'IT',1500),(102,'Sales',20000),
+(103,'Sales',45632),(104,'HR',100),(105,'IT',83321),(106,'Sales',254);
+
+select * from dep1;
+
+
+--Grouped By--
+
+--Show Maximum salery of all department --
+
+select dName,max (dSal) as Maximum from dep1  group by dName;
+
+--Show Maximum Salery of only Sales Department --
+
+select dName,max (dSal) as Maximum from dep1  group by dName having dName='sales';
+
+--Show Maximum salery of all department but Not show It Department --
+
+select dName,max(dSal) maximum from dep1 group by dName having dName!='IT';
+select dName,max(dSal) maximum from dep1 group by dName having dName<>'IT';
+
+
+
+--Logical Operator (OR)--
+
+select * from emp where eNo=101 or eName='Manish'; --Show record which have (eNo=101 eName='Manish')--
+select * from emp where eNo IN (101,102,103);      --Only Show this no (101,102,103) of record--
+select * from emp where eNo not IN (101,102,103);  --Not Show this no (101,102,103) of record--
+
+--Logical Operator (Between,AND)--
+
+select *from emp where esal between 15000 and 250000 --Find Salary Between 15000 and 250000 including both
+select *from emp where  esal>16000 and esal<250000
+
+--Logical Operator (NOT)--
+
+select * from emp where esal is Null;     --Find the details whose selary is not Decide--
+select * from emp where eSal is not Null; --Find the details whose selary is Decide--
+
+---------------------------------------------------(Set Operation)----------------------------------------------------------
+
+--Employee Table---
+
+create table emp(eNo int ,eName varchar(20),eSal float)
+
+Insert into emp values(101,'Manish',15000.5),(102,'Sohan',14000.3),
+(103,'Rahul',1200.5),(105,'Rohan',150.2),(106,'Shivani',440235.2),(107,'Dog',12456.3)
+
+select * from emp;
+
+--Department Table--
+create table dep(dNo int,dName varchar(20),dSal float)
+
+Insert into dep values(101,'IT',15000.5),(102,'Sales',14000.3),
+(103,'Marketing',1200.5),(104,'Network',153.2),(108,'Suman',45769.3),
+(109,'Pranjali',4569.3)
+
+select * from dep;
+
+--Set Operation--
+
+select eNo from emp UNION ALL select dNo from dep
+select eNo from emp UNION select dNo from dep
+select eNo from emp INTERSECT select dNo from dep
+select eNo from emp EXCEPT select dNo from dep
+
+------------------------------------(JOIN OPERATION)-------------------------------------
+
+--Employee Table---
+create table emp(eNo int ,eName varchar(20),edNo int)
+
+Insert into emp values(101,'Manish',111),(102,'Sohan',222),
+(103,'Rahul',333),(105,'Rohan',555),(106,'Shivani',666),(107,'Dog',777)
+
+select * from emp;
+
+
+--Department Table---
+create table dep(dNo int,dName varchar(20))
+
+Insert into dep values(111,'IT'),(222,'Sales'),
+(333,'Marketing'),(444,'Network'),(888,'BPO'),
+(999,'Development')
+
+select * from dep;
+
+--Join Operation--
+
+--Cross Join (Comma Join)--
+
+select eNo,eName,dName from emp,dep;
+select eNo,eName,dep.dNo,dName from emp,dep;
+select eNo,eName,d.dNo,dName from emp,dep as d;
+select eNo,eName,d.dNo,dName from emp CROSS JOIN dep as d;
+
+--Equi JOins (Inner Joins)--
+
+select eNo,eName,dep.dNo,dName from emp,dep where emp.edNo=dep.dNo;
+select eNo,eName,dName from emp INNER JOIN dep on emp.edNo=dep.dNo;
+select eNo,eName,d.dNo,dName from emp as e INNER JOIN dep as d on e.edNo=d.dNo ;
+select eNo,eName,d.dNo,dName from emp as e JOIN dep as d on e.edNo=d.dNo ;
+
+--Outer Join--
+
+--Left Outer Join--
+
+select emp.edNo , dep.dNo from emp LEFT OUTER JOIN dep on emp.edNo=dep.dNo; 
+select emp.edNo as E , dep.dNo as D from emp LEFT OUTER JOIN dep on emp.edNo=dep.dNo;
+select emp.edNo as E , dep.dNo as D from emp LEFT JOIN dep on emp.edNo=dep.dNo;
+
+--Right Outer Join--
+
+select emp.edNo , dep.dNo from emp RIGHT OUTER JOIN dep on emp.edNo=dep.dNo;
+select emp.edNo as E , dep.dNo as D from emp RIGHT OUTER JOIN dep on emp.edNo=dep.dNo;
+select emp.edNo as F , dep.dNo as G from emp RIGHT  JOIN dep on emp.edNo=dep.dNo;
+
+--Full Outer Join--
+
+select emp.edNo , dep.dNo from emp FULL OUTER JOIN dep on emp.edNo=dep.dNo;
+select emp.edNo as E , dep.dNo as D from emp FULL OUTER JOIN dep on emp.edNo=dep.dNo;
+select emp.edNo as E , dep.dNo as D from emp FULL JOIN dep on emp.edNo=dep.dNo;
+
+
+--Create Table--
+create table emp1(eNo int ,eName varchar(20),eSal int)
+
+Insert into emp1 values(101,'Manish',1500),(102,'Sohan',20000),
+(103,'Rahul',45632),(104,'Rohan',100),(105,'Shivani',83321),(106,'Dog',254);
+
+select * from emp1;
+
+--Self Join--
+
+select * from emp1 e1,emp1 e2 where e1.eSal>e2.eSal and e2.eName='Manish';
+
+select e1.eNo ,e1.eName,e1.eSal from emp1 e1,emp1 e2 where e1.eSal>e2.eSal and
+e2.eName='Manish';
+
+
+-----------------------------------------------Constrant-------------------------------------------------------
+
+--------------------------------------------(NOT NULL Constrant)------------------------------------------
+
+-- create NOT NULL Consteaints--
+
+--First Method--
+
+create table Emp(eno int NOT NULL,ename varchar(20),esal int)
+drop table emp;
+
+--Second Method--
+
+create table Emp(eno int ,ename varchar(20),esal int);
+alter table Emp alter column eno int NOT NULL;
+drop table emp;
+
+--Insert Value in Table--
+insert into Emp values(101,'Akash',15002.35);
+insert into Emp values(102,'sumit',1853.30);
+insert into Emp values(Null,'Sumit',12345.54); /*  Error Not Enter the null value*/
+
+select * from Emp
+
+--Remove  NOT NULL Consteaint--
+
+alter table Emp alter column eno int NULL; 
+
+insert into Emp values(101,'Akash',15002.35);
+insert into Emp values(102,'sumit',1853.30);
+insert into Emp values(Null,'Sumit',12345.54); 
+
+select * from Emp
+
+--------------------------------------------(DEFAULT Constraint)-----------------------------------------------
+
+--Create default Constraint--
+
+--First Method--
+
+create table emp(eNo int,eNAme varchar(20), edep varchar(20) DEFAULT 'Berojgar')
+drop table emp
+
+-- Second Method--
+
+create table emp(eNo int,eNAme varchar(20), edep varchar(20) DEFAULT 'Berojgar');
+drop table emp
+
+-- Third Method (Create default query after create table)--
+ 
+Create table emp(eNo int,eNAme varchar(20), edep varchar(20))
+
+alter table emp add constraint D1 DEFAULT 'Berojgar' for edep
+drop table emp
+
+
+--Insert Value In Table--
+
+insert into emp values(101,'Manish','IT')
+insert into emp (eNo,eName)values(102,'Sohan')--Place of edep inslized default value--
+insert into emp (eNo,eName)values(103,'Rahul')--Place of edep inslized default value--
+
+select * from emp;
+
+--Remove Default Constraint--
+
+sp_help emp 
+
+alter table emp drop constraint  DF__emp__edep__4316F928 --Not give the constraint name--
+alter table emp drop constraint  D1   --Using Constraint Name--
+
+insert into emp values(101,'Manish','IT')
+insert into emp (eNo,eName)values(102,'Sohan') --Place of edep inslized NULL value--
+insert into emp (eNo,eName)values(103,'Rahul') --Place of edep inslized NULL value--
+
+select * from emp;
+
+----------------------------------------------(UNIQUE Constraint)----------------------------------------------
+
+--Create UNIQUE Constraint--
+
+--First Method--
+Create table emp1(eNo int unique,eName varchar(20),eSal int UNIQUE )
+
+drop table emp1;
+
+--Second Method--
+create table emp1(eNo int, eName varchar(20),eSal int, 
+Constraint U1 UNIQUE(eNo),Constraint U2 UNIQUE(eSal)) --Give Constraint Name U1,U2--
+
+drop table emp1;
+
+--Third Method (Create UNIQUE query after create table) --
+create table emp1(eNo int, eName varchar(20),eSal int,)
+
+alter table emp1 add constraint U1 UNIQUE(eNo);
+alter table emp1 add constraint U2 UNIQUE(eSal);
+
+drop table emp1;
+
+--Insert Value In Table--
+
+insert into emp1 values(101,'Manish',10000)
+insert into emp1 values(Null,'Manish',Null)
+insert into emp1 values(101,'Mukesh',10000)--Erroe eNo,eSal is not unique--
+insert into emp1 values(Null,'Manish',Null)--Erroe eNo,eSal is not unique--
+
+select * from emp1;
+
+--Remove UNIQUE Constraint--
+
+SP_HELP emp1
+
+alter table emp1 drop constraint UQ__emp1__3D8E39E74E2BC46F; --Not give the constraint name--
+
+alter table emp1 drop constraint U1,U2;   --Using Constraint Name--
+
+insert into emp1 values(101,'Manish',10000)
+insert into emp1 values(Null,'Manish',Null)
+insert into emp1 values(101,'Mukesh',10000)
+insert into emp1 values(Null,'Manish',Null)
+
+select * from emp1;
+
+--------------------------------------------(PRIMARY KEY Constraint)-----------------------------
+
+--Create PRIMARY KEY Constraint--
+
+--First Method--
+create table Emp2(eno int,ename varchar(20) PRIMARY KEY ,esal float)
+drop Table Emp2
+
+--Second Method--
+create table Emp2 (eno int,ename varchar(20),esal float,constraint P1 PRIMARY KEY (ename)); 
+drop Table Emp2
+
+--Third Method (Create PRIMARY KEY query after create table)--
+
+create table Emp2(eno int,ename varchar(20),esal float)
+
+alter table Emp2 alter column ename varchar(20) NOT NULL --First add NOT NULL Column--
+alter table emp2 add Constraint P1 PRIMARY KEY (ename) --Then add PRIMARY KEY Column--
+
+drop Table Emp2
+
+--Insert Value In Table--
+
+insert into Emp2 values(101,'Akash',15002.35);
+insert into Emp2 values(102,'Sumit',14573.33);
+insert into Emp2 values(103,null,14343.63);    -- Error because primary key is not null --
+insert into Emp2 values(104,'Akash',24588.32); -- Error because eneme is not primaey --
+
+select * from Emp2
+
+--Remove PRIMARY KEY Constraint--
+
+SP_HELP Emp2
+
+alter table Emp2 drop constraint PK__Emp2__0E8FC1F17CD18E9B --Not give the constraint name--
+alter table Emp2 alter column ename varchar(20) NULL --Create  NULL Column Value--
+
+alter table Emp2 drop constraint P1 --Using Constraint Name--
+alter table Emp2 alter column ename varchar(20) NULL --Create  NULL Column Value--
+
+
+insert into Emp2 values(101,'Akash',15002.35);
+insert into Emp2 values(102,'Sumit',14573.33);
+insert into Emp2 values(103,null,14343.63);    
+insert into Emp2 values(104,'Akash',24588.32);
+
+select * from Emp2
+
+--------------------------------------------(CHECK Constraint)--------------------------------------------------------
+
+--Create CHECK Constraint--
+
+--First Method--
+
+Create table emp (eNo int,aName varchar(20),eDep varchar(20) CHECK (eDep in ('Sales','IT')));
+drop table emp;
+
+--Second Method--
+
+Create table emp(eNo int,eName varchar(20),eDep varchar(20) constraint checkdep CHECK(eDep in('sales','IT')));
+drop table emp;
+
+--Third Methd (After create table add Check Constraint)--
+
+create table emp(eNo int,eName varchar(20),eDep varchar(20))
+alter table emp add constraint checkdep CHECK (eDep in('Sales','IT'))
+drop table emp;
+
+--Insret Value in Table--
+
+insert into emp values(101,'Manish','Sales')
+insert into emp values(102,'Satish','IT')
+insert into emp values(103,'Sumit','Berojgar') --Error because Brojgar is Not vilable in Table)
+select * from emp
+
+--Remove CHECK Constraint--
+
+SP_Help emp
+
+alter table emp drop constraint CK__emp__eDep__29572725 -- Not give Constraint Name--
+alter table emp drop constraint checkdep --Give Constrant Name--
+
+insert into emp values(101,'Manish','Sales')
+insert into emp values(102,'Satish','IT')
+insert into emp values(103,'Sumit','Brojgar') 
+select * from emp
+
+--------------------------------------------(FOREIGN KEYConstraint)--------------------------------------------
+
+--Create FOREIGN KEYConstraint--
+
+--First Create Primary Key Table--
+
+create table dept(dNo int Constraint P1 PRIMARY KEY, dName varchar(20)) 
+
+insert into dept values(101,'IT')
+insert into dept values(102,'Sales')
+insert into dept values(103,'HR')
+insert into dept values(NULL,'TL')--Error Primary Key Not Null--
+
+select * from dept
+
+--Then Create FOREIGN KEY--
+
+--First Method--
+
+create table emp(eNo int,eName varchar(20),dno int  references dept(dNO))
+drop table emp
+
+--Second Method--
+
+create table emp(eNo int,eName varchar(20),dno int ,constraint F1 FOREIGN KEY (dNo) references dept(dNO))
+drop table emp
+
+--Third Method (After making table add FOREIGN KEY)--
+
+create table emp(eNo int,eName varchar(20),dno int)
+alter table emp add constraint F1 FOREIGN KEY (dNo) references dept(dNo)
+drop table emp
+
+--Insert Value in table--
+
+insert into emp values(111,'Mansh',101)
+insert into emp values(222,'Sudhir',102)
+insert into emp values(333,'Sonu',NULL)
+insert into emp values(444,'Sonu',NULL)
+insert into emp values(555,'Sonu',123)--Erroer because 123 is not Primary--
+
+select * from emp
+
+--Remove FOREIGN KEY constraint--
+
+SP_help emp
+
+alter table emp drop constraint FK__emp__dno__31EC6D26; -- Using Default Constraint Name--
+alter table emp drop constraint F1; --Give Constrant Name--
+
+insert into emp values(111,'Mansh',101)
+insert into emp values(222,'Sudhir',102)
+insert into emp values(333,'Sonu',NULL)
+insert into emp values(444,'Sonu',NULL)
+insert into emp values(555,'Sonu',123)
+
+select * from emp
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------
+
+create table Emp(eno int,ename varchar(20),esal int, eAge int);
+
+insert into Emp values(101,'Manish',15000,18),(102,'Shubham',13000,28),(103,'Rohan',2000,12),
+(104,'Ritu',7530,23),(101,'Manish',15000,18),(102,'Shubham',13000,28)
+
+select * from Emp
+drop table emp
+
+--Swap One Column data in Second Column--
+
+Update emp set eSal=eAge ,eAge=esal
+select * from emp
+
+--Make duplicate copy of table--
+
+--Not Copy duplicate row--
+
+select distinct * into empCopy from emp; 
+select * from empcopy
+
+--Copy duplicate row--
+
+select * into empCopy1 from emp;
+select * from empcopy1
+
+--Copy Data-- 
+
+insert into empCopy select * from emp;
+select * from empCopy;
+
+-----------------------------------------------(Duplicate)----------------------------------------------
+--Sub Query--
+
+create table Emp1(eno int,ename varchar(20),esal int, eAge int);
+drop table emp1;
+
+insert into Emp1 values(101,'Manish',15000,18),(102,'Shubham',13000,28),(103,'Rohan',2000,12),
+(104,'Ritu',7530,23),(101,'Manish',15000,18),(101,'Manish',15000,18),(102,'Shubham',13000,28),
+(102,'Shubham',13000,28),(104,'Ritu',7530,23),(104,'Ritu',7530,23);
+
+select * from Emp1;
+
+--Count Duplicet recort in table--
+
+select eno,ename,esal,eAge,count (*) as total  from emp1 group by eno,ename,esal,eAge having count(*)>1;
+
+--Print Duplicate Record in table--
+
+select eno,ename,esal,eage from emp1  group by eno,ename,esal,eage having count(*)>1;
+
+--Remove Duplicate element--
+
+with cte as (select *,row_number() over
+(partition by eno,ename,esal,eage order by eno,ename,esal,eage)
+row_n from emp1)delete from cte where row_n>1;
+
+select * from emp1;
+
+-----------------------------------------------(Maximum & Minimum Selary)----------------------------------------------
+
+create table Emp2(eno int,ename varchar(20),esal int, edNo int);
+
+insert into Emp2 values(101,'Manish',15000,111),(102,'Shubham',13000,222),
+(103,'Rohan',2000,333),(104,'Ritu',7530,444),(105,'Shyam',1000,555),
+(106,'Rakesh',63000,666),(107,'Rohit',130,777),(108,'Monu',13023000,888);
+
+select * from emp2;
+
+--find the Higest & Miximun selary in table--
+
+select * from emp2 where esal=(select max(esal) from emp2 );
+
+--find the Lowest & Minimum selary in table--
+
+select * from emp2 where esal=(select min(esal) from emp2 );
+
+--find the Higest & Maximum selary of Rohan selary--
+
+select * from emp2 where esal>(select esal from emp2 where ename='Rohan');
+
+--find the Lowest & Minimum selary of Rohan selary--
+
+select * from emp2 where esal<(select esal from emp2 where ename='Rohan');
+
+--Find Maximum selary in Manish of department number--
+
+select * from emp2 where esal>
+(select max(esal) from emp2 where edNo=
+(select edno from emp2 where eName='Manish'));
+
+--Find Minimum selary in Manish of department number--
+
+select * from emp2 where esal<
+(select min(esal) from emp2 where edNo=
+(select edno from emp2 where eName='Manish'));
+
+
+--Find Selary Lowest to Higest--
+
+select * from emp2 where esal > ANY (select esal from emp2 where ename='Ritu');
+
+--Find Selary Higest to Higest--
+
+select * from emp2 where esal > ALL  (select esal from emp2 where ename='Ritu');
+
+--Find Second Higest selary--
+
+select * from emp2 where esal= (select max(esal) from emp2 where esal<(select max(esal) from emp2));
+
+--Find Second Lowest selary--
+
+select * from emp2 where esal= (select min(esal) from emp2 where esal>(select min(esal) from emp2));
+
+--Find Third Higest selary--
+
+select * from emp2 where esal= (select max(esal) from emp2 where esal<
+(select max(esal) from emp2 where esal<(select max(esal) from emp2)));
+
+--Find Third Lowest selary--
+
+select * from emp2 where esal= (select min(esal) from emp2 where esal>
+(select min(esal) from emp2 where esal>(select min(esal) from emp2)));
+
+
+---------------------------------Correlated Sub Query--------------------------------
+
+-------------Higest Selary----------
+
+--First Higest Selary--
+
+select ename,esal from emp2 t1 where 1-1=(select count (DISTINCT esal)from emp2 t2 where t1.esal<t2.esal);
+
+--Second Higest Selary--
+
+select ename,esal from emp2 t1 where 2-1=(select count (DISTINCT esal)from emp2 t2 where t1.esal<t2.esal);
+
+-------------Lowest Selary----------
+
+--First Lowest Selary--
+
+select ename,esal from emp2 t1 where 1-1=(select count (DISTINCT esal)from emp2 t2 where t1.esal>t2.esal);
+
+--Second Lowest Selary--
+
+select ename,esal from emp2 t1 where 2-1=(select count (DISTINCT esal)from emp2 t2 where t1.esal>t2.esal);
+
+--Third Lowest Selary--
+
+select ename,esal from emp2 t1 where 3-1=(select count (DISTINCT esal)from emp2 t2 where t1.esal>t2.esal);
+
+
